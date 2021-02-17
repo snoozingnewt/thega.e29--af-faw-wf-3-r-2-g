@@ -8,6 +8,7 @@ global enemytype
 global life
 global enemydamage
 global enemyhealth
+global thirdchoice
 #Displays the choices
 def choices():
     print('''    Press 1 to start a new game.
@@ -16,34 +17,39 @@ def choices():
     Press 4 to go to a saved game.
     Press 5 to view stats.
     Press 6 to quit.''')
-    choice = int(input())
-
+    choice = input()
+    
 #Choice sorter
-    if choice == 1:
-        print('Starting Game...')
-        time.sleep(1)
-        scenes()
-    elif choice == 2:
-        print('Made by snoozingnewt 2021 all rights reserved.')
-        time.sleep(1)
-        choices()
-    elif choice == 3:
-        money = 0
-        life = 100
-        itemstate = 1
-        scene = 1
-        scene = scene-1
-        choices()
-    elif choice == 4:
-        thirdchoices()
-    elif choice == 5:
-        print('na')
-        choices()
-    elif choice == 6:
-        exit
-    else:
+    isitastring = isinstance(choice, str)
+    if any(c.isalpha() for c in choice)== True:
         print("Not a choice. Please try again.")
         choices()
+    else:
+        if int(choice) == 1:
+            print('Starting Game...')
+            time.sleep(1)
+            scenes()
+        elif int(choice) == 2:
+            print('Made by snoozingnewt 2021 all rights reserved.')
+            time.sleep(1)
+            choices()
+        elif int(choice) == 3:
+            money = 0
+            life = 100
+            itemstate = 1
+            scene = 1
+            scene = scene-1
+            choices()
+        elif int(choice) == 4:
+            thirdchoices()
+        elif int(choice) == 5:
+            print('na')
+            choices()
+        elif int(choice) == 6:
+            exit
+        else:
+            print("Not a choice. Please try again.")
+            choices()
     
 def secondchoices():
     global life
@@ -52,16 +58,19 @@ def secondchoices():
     Press 3 to get your gamestate and itemstate.
     Press 4 to get your health.
     ''')
-    secondchoice = int(input())
-    if secondchoice == 1:
+    secondchoice = input()
+    if any(c.isalpha() for c in secondchoice)== True:
+        print("Not a choice. Please try again.")
+        secondchoices()
+    if int(secondchoice) == 1:
         pass
-    elif secondchoice == 2:
+    elif int(secondchoice) == 2:
         print("Gamestate: "+str(scene)+". Itemstate: "+str(itemstate))
         print('You have quit the game.')
-    elif secondchoice == 3:
+    elif int(secondchoice) == 3:
         print("Gamestate: "+str(scene)+". Itemstate: "+str(itemstate))
         secondchoices()
-    elif secondchoice == 4:
+    elif int(secondchoice) == 4:
         print(life)
         secondchoices()
     else:
@@ -75,13 +84,50 @@ def thirdchoices():
     num4 = 7
     global itemstate
     global scene
-    global scene
+    global thirdchoice
     print('''    Enter your gamestate. (A number)''')
-    thirdchoice = int(input())
+    firstthirdchoice = input()
+    if any(c.isalpha() for c in firstthirdchoice)== True:
+        print("Not a choice. Please try again.")
+        thirdchoices()
+    else:
+        thirdchoice = int(firstthirdchoice)
     print('''    Enter your itemstate. (A number)''')
-    fourthchoice = int(input())
+    ffourthchoice = input()
+    if any(c.isalpha() for c in ffourthchoice)== True:
+        print("Not a choice. Please try again.")
+        thirdchoices()
+    else:
+        fourthchoice = int(ffourthchoice)
 
-#game
+    scenesave()
+
+    itemstate = 1
+    for i in range(1,13):
+        if fourthchoice % (num4**i) == 0:
+            itemstate = itemstate*7
+        if fourthchoice % (num3**i) == 0:
+            itemstate = itemstate*5
+        if fourthchoice % (num2**i) == 0:
+            itemstate = itemstate*3
+        if fourthchoice % (num1**i) == 0:
+            itemstate = itemstate*2
+
+#start
+    if scene == 0:
+        print("Start a new game!")
+        choices()
+    else:
+        scenes()
+
+        
+def scenesave():
+    num1 = 2
+    num2 = 3
+    num3 = 5
+    num4 = 7
+    global scene
+    global thirdchoice
     if thirdchoice % num4 == 0:
         scene = scene*7
     if thirdchoice % num3 == 0:
@@ -91,29 +137,7 @@ def thirdchoices():
     if thirdchoice % num1 == 0:
         scene = scene*2
     else:
-        scene = 1
-
-#item
-    if fourthchoice % num4 == 0:
-        itemstate = itemstate*7
-    if fourthchoice % num3 == 0:
-        itemstate = itemstate*5
-    if fourthchoice % num2 == 0:
-        itemstate = itemstate*3
-    if fourthchoice % num1 == 0:
-        itemstate = itemstate*2
-    else:
-        itemstate = 1
-    scene = scene
-#start
-    if scene == 1:
-        print("Start a new game!")
-        choices()
-    else:
-        scene = scene
-        scenes()
-
-
+        scene = 0
 
 
 
@@ -134,26 +158,25 @@ def scenes():
         secondchoices()
         print("An enemy approaches!")
         enemy()
-        
-        scene = num1
         secondchoices()
+        scene = num1
         scenes()
     if scene == num1:
         time.sleep(0.5)
         print("Not Bad.")
-        scene = num2
         secondchoices()
+        scene = num2
         scenes()
     if scene == num2:
         time.sleep(0.5)
         print("hi world 3")
-        scene = num3
         secondchoices()
+        scene = num3
         scenes()
     if scene == num3:
         time.sleep(0.5)
         print("hi world 4")
-        scene = 69
+        scene = 10918981029384981293489817395709278934
 
     
     
@@ -231,15 +254,9 @@ def battleloss():
     deaths += 1
     scenes()
     
-class actions:
-    def __init__ (self, money, life, itemstate, scene):
-        self.life = life
-        self.money = money
-        self.itemstate = itemstate
-        self.scene = scene
-    global itemstate
-    global scene
-    global scene
+
+
+
 
 
 reset = 0
@@ -248,7 +265,7 @@ liferegain = 5
 maxlife = 100
 life = 100
 itemstate = 1
-scene = 0
+scene = 1
 deaths = 0
 choices()
 enemytype = 0
