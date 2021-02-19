@@ -1,8 +1,11 @@
-#imports
+#Imports
 import time
+import sys
 
 #Displays the choices
 def choices():
+    global itemstate
+    global scene
     print('''    Press 1 to start a new game.
     Press 2 to view credits.
     Press 3 to reset progress.
@@ -10,7 +13,6 @@ def choices():
     Press 5 to view stats.
     Press 6 to quit.''')
     choice = input()
-    
 #Main Menu Choice
     if choice.isnumeric() == False:
         print("Not a choice. Please try again.")
@@ -39,17 +41,18 @@ def choices():
             thirdchoices()
         #View Stats
         elif int(choice) == 5:
-            print('Deaths: '+deaths)
-            print('Itemstate: WIP ')
-            print('Gamestate: WIP')
+            print('Deaths: '+str(deaths))
+            print('Itemstate:' + str(itemstate))
+            print('Gamestate:' + str(scene))
             choices()
         #Quit
         elif int(choice) == 6:
-            exit
+            sys.exit()
         #Else
         else:
             print("Not a choice. Please try again.")
             choices()
+
 #In-game choices
 def secondchoices():
     global life
@@ -69,7 +72,7 @@ def secondchoices():
     elif int(secondchoice) == 2:
         print("Gamestate: "+str(scene)+". Itemstate: "+str(itemstate))
         print('You have quit the game.')
-        exit
+        gamequit()
     #Stats
     elif int(secondchoice) == 3:
         print("Gamestate: "+str(scene)+". Itemstate: "+str(itemstate))
@@ -81,6 +84,7 @@ def secondchoices():
     else:
         print("Error.")
         secondchoices()
+
 #Save choices
 def thirdchoices():
     num1 = 2
@@ -147,7 +151,6 @@ def scenesave():
     else:
         scene = 0
 
-
 #Different scenes of the game
 def scenes():
     num1 = 2
@@ -197,7 +200,6 @@ def scenes():
         print("hi world 4")
         scene = 10918981029384981293489817395709278934
 
-    
 #Spawns in enemies
 def enemy():
     num1 = 2
@@ -222,7 +224,6 @@ def enemy():
         enemydamage = 6
         attack()
         
-        
 #Player attack      
 def attack():
     num1 = 2
@@ -235,15 +236,9 @@ def attack():
     global scene
     global maxlife
     global enemydamage
-    mode = input("Press a to attack, r to restart, and d to passively regain health.")
-    #If enemy is dead
-    if enemyhealth < 0 or enemyhealth == 0:
-        life = maxlife
-        enemydamage = 0
-        print("You Win!")
-        exit
+    mode = input("Press a to attack, r to restart, and d to passively regain health. \n")     
     #If you attack
-    elif mode == 'a':
+    if mode == 'a':
         if itemstate % num1**2 == 0:
             enemyhealth = enemyhealth-7
             print("Enemyhealth: "+ str(enemyhealth))
@@ -270,6 +265,7 @@ def attack():
     else:
         print("Invalid. Try again.")
         attack()
+        
 #Tests to see if your life is higher than your maximum life
 def lifetest():
     global life
@@ -278,6 +274,7 @@ def lifetest():
         lifetest()
     else:
         pass
+
 #Enemy attack
 def counterattack():
     global scene
@@ -288,7 +285,7 @@ def counterattack():
     num3 = 5
     num4 = 7
     life = life - enemydamage
-    #If you kill the enemy
+    #If enemy is dead
     if enemyhealth < 0 or enemyhealth == 0:
         life = maxlife
         enemydamage = 0
@@ -300,23 +297,26 @@ def counterattack():
     #If none of that happens and the battle is still going
     else:
         attack()
+
 #If you die
 def battleloss():
     global deaths
     print("You lose... try again?")
     deaths += 1
     scenes()
+
 #Continue
 def continues():
-    willitcontinue = input("Press any key except q to continue. q will quit the game.")
+    willitcontinue = input("Press any key except q to continue. q will quit the game. \n")
     if willitcontinue == 'q':
-        exit
+        gamequit()
     else:
         pass
+
+#Goes to main menu
+def gamequit():
+    choices()
     
-
-
-
 #Variables 
 reset = 0
 money = 0
@@ -328,5 +328,3 @@ scene = 0
 deaths = 0
 choices()
 enemytype = 0
-
-
