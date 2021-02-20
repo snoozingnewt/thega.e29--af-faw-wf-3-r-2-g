@@ -1,6 +1,8 @@
 #Imports
+#I don't care if you hate me but I love global
 import time
 import sys
+import random
 
 #Displays the choices
 def choices():
@@ -11,9 +13,10 @@ def choices():
     Press 3 to reset progress.
     Press 4 to go to a saved game.
     Press 5 to view stats.
-    Press 6 to quit.''')
+    Press 6 for freeplay.
+    Press 7 to quit.''')
     choice = input()
-#Main Menu Choice
+    #Main Menu Choice
     if choice.isnumeric() == False:
         print("Not a choice. Please try again.")
         choices()
@@ -45,8 +48,11 @@ def choices():
             print('Itemstate:' + str(itemstate))
             print('Gamestate:' + str(scene))
             choices()
-        #Quit
+        #Freeplay
         elif int(choice) == 6:
+            freeplay()
+        #Quit
+        elif int(choice) == 7:
             sys.exit()
         #Else
         else:
@@ -203,15 +209,19 @@ def scenes():
 #Spawns in enemies
 def enemy():
     num1 = 2
+    global specialattack
     global enemytype
     global enemyhealth
     global reset
     global enemydamage
+    specialattack = 0
     #Which enemy is spawned is determined here
     if scene == 0:
         enemytype = 1
     elif scene == num1:
         enemytype = 2
+    elif scene == num2 or scene == num3:
+        enemytype = random.randint(3,8)
     #Different Enemies
     if enemytype == 1:
         print("You are challenged by... Training Dummy!")
@@ -223,6 +233,24 @@ def enemy():
         enemyhealth = 100
         enemydamage = 6
         attack()
+    elif enemytype == 3:
+        enemyhealth = random.randint(40,60)
+        enemydamage = random.randint(7,11)
+        attack()
+    elif enemytype == 4:
+        enemyhealth = random.randint(800, 1260)
+        enemydamage = random.randint(0,4)
+        attack()
+    elif enemytype == 5:
+        enemyhealth = random.randint(75,125)
+        specialattack = 1
+        enemydamage = random.randint(2,5)
+    elif enemytype == 6:
+        pass
+    elif enemytype == 7:
+        pass
+    elif enemytype == 8:
+        pass
         
 #Player attack      
 def attack():
@@ -280,6 +308,7 @@ def counterattack():
     global scene
     global enemydamage
     global life
+    global specialattack
     num1 = 2
     num2 = 3
     num3 = 5
@@ -294,6 +323,18 @@ def counterattack():
     #If the enemy kills you
     elif life == 0 or life < 0:
         battleloss()
+    #If the enemy has a special buff or attack
+    elif specialattack > 0:
+        if specialattack == 1:
+            attackornot = random.randint(0,1)
+            if attackornot == 1:
+            #Special Attack - Gets to attack twice (50% chance)
+                counterattack()
+            else:
+                pass
+        elif specialattack == 2:
+            pass
+        
     #If none of that happens and the battle is still going
     else:
         attack()
@@ -315,6 +356,12 @@ def continues():
 
 #Goes to main menu
 def gamequit():
+    choices()
+
+#Freeplay
+def freeplay():
+    pass
+    print("WIP")
     choices()
     
 #Variables 
